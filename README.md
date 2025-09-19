@@ -20,30 +20,30 @@ To avoid typing the long command, your password, and Duo verification each time,
 
 1. **Edit (or create) your SSH config file:**
 
-```
-nano ~/.ssh/config
-```
+    ```
+    nano ~/.ssh/config
+    ```
 
 2. **Add the following lines:**
 
-```
-Host boom
-    HostName xxx111
-    User your_umn_username
-    ProxyJump your_umn_username@mangi.msi.umn.edu
-
-    ControlMaster auto
-    ControlPath /tmp/%r@%h:%p
-    ControlPersist 2h
-```
-_The first block allows you to connect to the BOOM nodes using `ssh boom`. The second block keeps the SSH connection alive while a terminal is open, and for 2 hours afterward. This prevents you from having to validate Duo each time you open a new SSH connection._
+    ```
+    Host boom
+        HostName xxx111
+        User your_umn_username
+        ProxyJump your_umn_username@mangi.msi.umn.edu
+    
+        ControlMaster auto
+        ControlPath /tmp/%r@%h:%p
+        ControlPersist 2h
+    ```
+    _The first block allows you to connect to the BOOM nodes using `ssh boom`. The second block keeps the SSH connection alive while a terminal is open, and for 2 hours afterward. This prevents you from having to validate Duo each time you open a new SSH connection._
 
 3. **Set up SSH key-based authentication:**
-```
-ssh-keygen -t ed25519 -C "your_umn_username@umn.edu"
-ssh-copy-id -i ~/.ssh/id_ed25519.pub your_umn_username@mangi.msi.umn.edu
-```
-_This allows passwordless login through the jump host._
+    ```
+    ssh-keygen -t ed25519 -C "your_umn_username@umn.edu"
+    ssh-copy-id -i ~/.ssh/id_ed25519.pub your_umn_username@mangi.msi.umn.edu
+    ```
+    _This allows passwordless login through the jump host._
 
 
 ## Monitor BOOM
