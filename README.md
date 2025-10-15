@@ -67,3 +67,38 @@ ssh -L 9090:localhost:9090 boom
 ssh -L 9092:localhost:9092 boom
 ```
 _After running the command, you can open your browser or local client and connect to localhost:<LOCAL_PORT> to interact with the service._
+
+
+## Backup BOOM Data
+MSI provides access to a [Second Tier Storage](https://msi.umn.edu/about-msi-services/data-storage/second-tier-storage) platform offering up to 120 TB of space per project.
+This storage tier is slower than the primary HPC storage but is ideal for large datasets, archival data, and backups.
+
+BOOM uses this storage to back up and restore its MongoDB databases.
+The Second Tier Storage supports both the S3 (Simple Storage Service) interface and Globus for data transfer.
+The following steps describe how to back up and restore the BOOM MongoDB data using S3:
+
+1. **Dump MongoDB to a gzip file**
+    ```bash
+    ./apptainer.sh backup <local_backup_dir>
+    ```
+2. **Upload the backup to S3**
+    ```bash
+    s3cmd put <path_to_backup_directory>/mongo_YYYY-MM-DD.gz s3://<bucket_name>
+    ```
+
+3. **List backups on S3**
+    ```bash
+    s3cmd ls s3://<bucket_name>
+    # Example output:
+    # 2025-10-15 17:15    64G  s3://<bucket_name>/mongo_2025-10-15.gz
+    ```
+
+4. **Download a backup**
+    ```bash
+    s3cmd get s3://<bucket_name>/mongo_YYYY-MM-DD.gz <local_restore_dir>
+    ```
+
+5. **Restore MongoDB from a backup**
+    ```bash
+    ./apptainer.sh restore <local_restore_dir>/mongo_YYYY-MM-DD.gz
+    ```
