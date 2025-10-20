@@ -7,8 +7,8 @@
 cd boom || exit 1
 mkdir -p logs/slurm
 
-exec >"logs/slurm/consume_ztf_daily_$(date -u "+%Y-%m-%d")_%j.out" 2>&1
+exec >"logs/slurm/consume_ztf_daily_$(date -u "+%Y-%m-%d").out" 2>&1
 
-./apptainer.sh start boom ztf $(date -d "+1 day" +%Y%m%d) public
+./apptainer.sh start boom ztf "$(date -d "+1 day" +%Y%m%d)" public
 
 sleep 79200 # 22h
