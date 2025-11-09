@@ -102,3 +102,25 @@ The following steps describe how to back up and restore the BOOM MongoDB data us
     ```bash
     ./apptainer.sh restore <local_restore_dir>/mongo_YYYY-MM-DD.gz
     ```
+
+
+## MSI Maintenance
+MSI performs scheduled maintenance on the 5th of every month, during which all nodes are taken offline for several hours.
+If Boom is running during this maintenance, `MongoDB`, `Kafka`, `kuma` and `Prometheus` may end up in an inconsistent state and require to be repaired.
+
+To repair the services:
+- Make sure Boom is completely stopped.
+- Remove the lock files in the persistent storage directories of each service (adjust paths if necessary):
+```bash
+# MongoDB
+rm apptainer/persistent/mongodb/mongod.lock
+rm apptainer/persistent/mongodb/WiredTiger.lock
+# Kafka
+rm apptainer/persistent/kafka_data/.lock
+# Prometheus
+rm apptainer/persistent/prometheus/lock
+# Uptime Kuma
+rm apptainer/persistent/kuma/kuma.db-shm
+rm apptainer/persistent/kuma/kuma.db-wal
+```
+After that, you can restart every services like usual.
